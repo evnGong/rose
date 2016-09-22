@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="titleBar"/>
+    <item type="id" name="bottomBar"/>
+    <item type="id" name="viewErrorContent"/>
+    <item type="id" name="viewContent"/>
+    <item type="id" name="viewNormalContent"/>
+    <item type="id" name="sparryView"></item>
+
+</resources>
