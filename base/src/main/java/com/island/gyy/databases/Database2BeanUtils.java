@@ -5,8 +5,8 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 
-import com.island.gyy.annotation.ColumnName;
-import com.island.gyy.annotation.IncreateColumn;
+import com.island.gyy.databases.annotation.ColumnName;
+import com.island.gyy.databases.annotation.IncreateColumn;
 import com.island.gyy.factory.ClassAsFactory;
 import com.island.gyy.utils.ReflectionUtil;
 

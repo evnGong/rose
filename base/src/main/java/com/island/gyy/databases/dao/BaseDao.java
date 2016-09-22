@@ -1,4 +1,4 @@
-package com.island.gyy.base.dao;
+package com.island.gyy.databases.dao;
 
 /**
  * Created with Android Studio.
