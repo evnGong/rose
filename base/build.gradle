@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 
-group = 'org.bitbucket.islandG'
+group = 'org.bitbucket.islandG:Rose:1.0.0'
 
 android {
     compileSdkVersion 24
