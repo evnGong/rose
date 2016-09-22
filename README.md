@@ -1,7 +1,7 @@
 
 **ReadMe**
 
-1.提供imageloader fractory
+1.提供imageloader fractory br
 2.提供BaseAdapter ，BaseCursorAdapter,BaseReclycleViewAdapter,
 3.ViewHolder工具类,可以直接为adapter内部setText
 4.mvp模型类-presender：BaseActivity，Basefragment，view：BaseViewProxy
