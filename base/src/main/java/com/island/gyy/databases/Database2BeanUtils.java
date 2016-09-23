@@ -135,6 +135,9 @@ public class Database2BeanUtils {
                 case Cursor.FIELD_TYPE_INTEGER:
                     obj = cursor.getInt(cursorIndex);
                     break;
+                case Cursor.FIELD_TYPE_NULL:
+                    obj = null;
+                    break;
                 case Cursor.FIELD_TYPE_BLOB:
                 default:
                    long longtemp = cursor.getLong(cursorIndex);
