@@ -15,3 +15,4 @@
 	        compile 'com.github.evnGong:rose:1.0.1'
 ```
 
+[![](https://jitpack.io/v/evnGong/rose.svg)](https://jitpack.io/#evnGong/rose)
