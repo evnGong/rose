@@ -6,6 +6,7 @@ import com.island.gyy.base.BaseApplication;
 import com.island.gyy.base.bean.ProcessBean;
 import com.island.gyy.databases.Database2BeanUtils;
 import com.island.gyy.databases.DatabaseUtils;
+import com.island.gyy.databases.annotation.IncreateColumn;
 import com.island.gyy.interfaces.OnBackUpdateData;
 import com.island.gyy.thread.ThreadHelper;
 import com.island.gyy.utils.FileUtil;
@@ -48,11 +49,6 @@ public class BaseDataBaseDao<T> extends BaseDao<T> {
     public <T> List<String> getInsertSql(String tablename, List<T> list) {
         if (NullUtils.isEmptyList(list)) return null;
         List<String> sql = new ArrayList<String>();
-        StringBuffer buffer = new StringBuffer();
-        String temp = null;
-        double doubleTemp = 0d;
-        int intTemp = 0;
-        Field f = null;
         for (T item : list) {
             sql.add(getInsertSql(tablename, item));
         }
@@ -77,13 +73,15 @@ public class BaseDataBaseDao<T> extends BaseDao<T> {
     }
 
 
-    public <T> StringBuffer getUpdateSql(final String table, final T item) {
+    public <T> StringBuffer getUpdateSql( String table, T item) {
         StringBuffer buffer = new StringBuffer();
         buffer.append("update " + table + " set ");
         HashMap<String, String> lMap = Database2BeanUtils.getBeanMap(item);
         if (lMap != null && lMap.size() > 0) {
             for (String column : lMap.keySet()) {
-                if (column.equals("_id")) continue;
+               if(Database2BeanUtils.containAnnatiton(item.getClass(),column, IncreateColumn.class)
+                       ||column.equals("_id"))
+                   continue;
                 buffer.append(column).append("=").append(lMap.get(column)).append(",");
             }
         }

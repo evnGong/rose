@@ -1,8 +1,6 @@
 package com.island.gyy.databases;
 
 import android.database.Cursor;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 
 import com.island.gyy.databases.annotation.ColumnName;
@@ -10,6 +8,7 @@ import com.island.gyy.databases.annotation.IncreateColumn;
 import com.island.gyy.factory.ClassAsFactory;
 import com.island.gyy.utils.ReflectionUtil;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +48,19 @@ public class Database2BeanUtils {
         }
     }
 
+    public static <T> boolean containAnnatiton(Class<T> tClass, String fieldName,
+                                               Class<? extends Annotation> annotationType) {
+        boolean isfind = false;
+        try {
+            Field lField = tClass.getField(fieldName);
+            lField.isAnnotationPresent(annotationType);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return isfind;
+    }
+
 
     public static <T> HashMap<String, String> getBeanMap(T item) {
         HashMap<String, String> lMap = new HashMap<String, String>();
@@ -63,7 +75,7 @@ public class Database2BeanUtils {
             try {
                 f = field[i];
                 String name = getColumnName(f);
-                if(name.equalsIgnoreCase("$change"))continue;
+                if (name.equalsIgnoreCase("$change")) continue;
                 if (f.isAnnotationPresent(IncreateColumn.class)) continue;
                 if (String.class.getName().equals(clsName)) {
                     temp = (String) f.get(item);
@@ -80,10 +92,10 @@ public class Database2BeanUtils {
                     if (intTemp >= 0) {
                         lMap.put(name, String.valueOf(intTemp));
                     }
-                }else if(long.class.getName().equals(clsName)){
+                } else if (long.class.getName().equals(clsName)) {
                     longTemp = f.getLong(item);
-                    if(longTemp >= 0l){
-                        lMap.put(name,String.valueOf(longTemp));
+                    if (longTemp >= 0l) {
+                        lMap.put(name, String.valueOf(longTemp));
                     }
                 }
             } catch (Exception e) {
@@ -104,7 +116,7 @@ public class Database2BeanUtils {
         for (int i = 0; i < field.length; i++) {
             try {
                 String name = getColumnName(field[i]);
-                if(name.equalsIgnoreCase("$change"))continue;
+                if (name.equalsIgnoreCase("$change")) continue;
                 keys.add(name);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -116,7 +128,6 @@ public class Database2BeanUtils {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     public static <T> T createBean(Cursor cursor, Class<T> tClass, String[] str) {
         int cursorIndex;
         T t = new ClassAsFactory<T>(tClass).createObj();
@@ -140,12 +151,16 @@ public class Database2BeanUtils {
                     break;
                 case Cursor.FIELD_TYPE_BLOB:
                 default:
-                   long longtemp = cursor.getLong(cursorIndex);
-                   if(longtemp != -1){
-                       obj = longtemp;
-                   }else{
-                       obj = null;
-                   }
+                    try {
+                        long longtemp = cursor.getLong(cursorIndex);
+                        obj = longtemp;
+                    } catch (Exception e) {
+                        try {
+                            obj = cursor.getString(cursorIndex);
+                        }catch (Exception e2){
+                            obj = null;
+                        }
+                    }
                     break;
             }
 
@@ -165,7 +180,7 @@ public class Database2BeanUtils {
     }
 
 
-    public static <T> List<T> createListBean(Cursor cursor, Class<T> tClass,int limit,int offset) {
+    public static <T> List<T> createListBean(Cursor cursor, Class<T> tClass, int limit, int offset) {
         String[] str;
         ClassAsFactory<T> lClassAsFactory;
         T t = null;
@@ -175,14 +190,14 @@ public class Database2BeanUtils {
             lClassAsFactory = new ClassAsFactory<T>(tClass);
             list = lClassAsFactory.createList();
             int size = cursor.getCount();
-            if(limit > 0 && size >limit){
+            if (limit > 0 && size > limit) {
                 size = limit;
             }
             cursor.moveToPosition(offset);
             for (int i = 0; i < size; i++) {
                 t = createBean(cursor, tClass, str);
                 list.add(t);
-                if(!cursor.moveToNext())break;
+                if (!cursor.moveToNext()) break;
             }
         }
         return list;
