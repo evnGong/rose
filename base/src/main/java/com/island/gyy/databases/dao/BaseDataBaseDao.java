@@ -11,12 +11,15 @@ import com.island.gyy.interfaces.OnBackUpdateData;
 import com.island.gyy.thread.ThreadHelper;
 import com.island.gyy.utils.FileUtil;
 import com.island.gyy.utils.NullUtils;
+import com.island.gyy.utils.ReflectionUtil;
 
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.island.gyy.utils.ReflectionUtil.containAnnatiton;
 
 /**
  * Created with Android Studio.
@@ -79,8 +82,7 @@ public class BaseDataBaseDao<T> extends BaseDao<T> {
         HashMap<String, String> lMap = Database2BeanUtils.getBeanMap(item);
         if (lMap != null && lMap.size() > 0) {
             for (String column : lMap.keySet()) {
-               if(Database2BeanUtils.containAnnatiton(item.getClass(),column, IncreateColumn.class)
-                       ||column.equals("_id"))
+               if(column.equals("_id"))
                    continue;
                 buffer.append(column).append("=").append(lMap.get(column)).append(",");
             }
@@ -90,6 +92,12 @@ public class BaseDataBaseDao<T> extends BaseDao<T> {
     }
 
 
+    /**
+     * @method 通过实体插入数据
+     * @author  Island_gyy 【island_yy@qq.com】
+     * @date 2016/10/10 17:21
+     * @describe
+     */
     public void insert(final String tableName, final List<T> list) {
         ThreadHelper.runOnBackgroundThread(new Runnable() {
             @Override
@@ -113,6 +121,12 @@ public class BaseDataBaseDao<T> extends BaseDao<T> {
             DatabaseUtils.newieGymnastic(getInsertSql(tableName, list),onBackUpdateData );
     }
 
+    /**
+     * @method 同步获取插入
+     * @author  Island_gyy 【island_yy@qq.com】
+     * @date 2016/10/10 17:21
+     * @describe
+     */
     public void insertSync(final String tableName, final T item) {
             DatabaseUtils.execute(getInsertSql(tableName, item));
     }
