@@ -56,6 +56,12 @@ public class ReflectionUtil {
         return value;
     }
 
+    /**
+     * @method 成员变量的注解
+     * @author  Island_gyy 【island_yy@qq.com】
+     * @date 2016/10/10 16:49
+     * @describe
+     */
     public static <T extends Annotation> T getNotAccessibleAnnotationFieldValue(Field f, Class<T> annotationClass) {
         try {
             T t = null;
@@ -85,6 +91,25 @@ public class ReflectionUtil {
             }
         }
         return  taget;
+    }
+
+    /**
+     * @method 当前成员变量是否包含注解
+     * @author  Island_gyy 【island_yy@qq.com】
+     * @date 2016/10/10 16:48
+     * @describe 
+     */
+    public static <T> boolean containAnnatiton(Class<T> tClass, String fieldName,
+                                               Class<? extends Annotation> annotationType) {
+        boolean isfind = false;
+        try {
+            Field lField = tClass.getField(fieldName);
+            lField.isAnnotationPresent(annotationType);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return isfind;
     }
 
 }
