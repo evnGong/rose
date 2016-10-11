@@ -46,6 +46,7 @@ public abstract class BaseViewProxyFragment<T extends BaseViewProxy> extends Bas
 	protected void initView(View view, Bundle savedInstanceState) {
 		mViewProxy.initWidget();
 		mViewProxy.initListener();
+		mViewProxy.initData(savedInstanceState);
 		_init();
 	}
 
