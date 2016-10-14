@@ -33,7 +33,8 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:24.2.0'
-    compile 'com.alibaba:fastjson:1.2.16'
+    compile 'com.alibaba:fastjson:1.1.54.android'
+//    compile 'com.alibaba:fastjson:1.2.16'
     compile 'com.android.support:recyclerview-v7:24.2.0'
 }
 
