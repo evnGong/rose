@@ -193,7 +193,6 @@ public class DatabaseUtils {
 			return false;
 		}finally{
 			 db.endTransaction();
-			 DatabaseUtils.closeDatabase(db);
 		}
 	}
 

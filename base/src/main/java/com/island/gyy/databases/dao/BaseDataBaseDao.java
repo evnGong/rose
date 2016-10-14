@@ -92,6 +92,12 @@ public class BaseDataBaseDao<T> extends BaseDao<T> {
     }
 
 
+    public StringBuilder getDeleteSql(String table) {
+        StringBuilder lStringBuilder = new StringBuilder(" delete * from ");
+        lStringBuilder.append(table);
+        return lStringBuilder;
+    }
+
     /**
      * @method 通过实体插入数据
      * @author  Island_gyy 【island_yy@qq.com】

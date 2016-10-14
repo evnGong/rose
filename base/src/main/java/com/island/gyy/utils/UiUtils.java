@@ -3,6 +3,9 @@ package com.island.gyy.utils;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
+import android.support.annotation.ColorRes;
+import android.support.v4.content.ContextCompat;
 import android.view.Display;
 
 import com.island.gyy.base.BaseApplication;
@@ -31,7 +34,6 @@ public class UiUtils {
 	
 	/**
 	 * 获取指定样式的圆形
-	 * @param roundRadius  : 圆角弧度
 	 * @param fillColor    : 填充颜色
 	 * @param strokeWidth  : 边框宽度
 	 * @param strokeColor  : 边框颜色
@@ -77,6 +79,13 @@ public class UiUtils {
 	}
 
 
+	public static int getColor(@ColorRes int colorResId) {
+		if(VersionUtils.isLowerVersion(Build.VERSION_CODES.ICE_CREAM_SANDWICH)){
+			return getResource().getColor(colorResId);
+		}else{
+			return ContextCompat.getColor(BaseApplication.getApplication(),colorResId);
+		}
+	}
 
 
 
