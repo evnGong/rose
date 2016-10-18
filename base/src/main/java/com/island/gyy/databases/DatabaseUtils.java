@@ -74,8 +74,6 @@ public class DatabaseUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return -1;
-		}finally {
-			DatabaseUtils.closeDatabase(db);
 		}
 	}
 
@@ -94,8 +92,6 @@ public class DatabaseUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return -1;
-		}finally {
-			DatabaseUtils.closeDatabase(db);
 		}
 	}
 	
@@ -113,8 +109,6 @@ public class DatabaseUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return -1;
-		}finally{
-			DatabaseUtils.closeDatabase(db);
 		}
 	}
 	
@@ -130,7 +124,6 @@ public class DatabaseUtils {
 			return db.rawQuery(sql, values);
 		} catch (Exception e) {
 			e.printStackTrace();
-			DatabaseUtils.closeDatabase(db);
 			return null;
 		}
 	}
@@ -146,7 +139,6 @@ public class DatabaseUtils {
 			DatabaseUtils.getSQLiteDatabase().execSQL(sql);
 		} catch (Exception e) {
 			e.printStackTrace();
-			DatabaseUtils.closeDatabase(db);
 		}
 	}
 

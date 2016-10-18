@@ -113,7 +113,7 @@ public class HttpTasker implements Runnable {
 				
 //				if(encoding != null && encoding.toLowerCase().contains("gzip")) {
 //					sendSucceedMsg(FileUtil.inputToString(new GZIPInputStream(mConnection.getInputStream()), "UTF-8"));
-//					
+//					o
 //				}else {
 //					sendSucceedMsg(FileUtil.inputToString(mConnection.getInputStream(), "UTF-8"));
 //				}
