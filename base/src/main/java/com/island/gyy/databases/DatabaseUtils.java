@@ -132,7 +132,6 @@ public class DatabaseUtils {
 	/**
 	 * 查询数据
 	 * @param sql    : 查询的SQL
-	 * @param values : 占位符值
 	 * @return
 	 */
 	public static void execute(String sql){
@@ -165,34 +164,39 @@ public class DatabaseUtils {
 		lProcessBean = new ProcessBean();
 
 		try {
-			lProcessBean.total = sqlList.size();
-			db = DatabaseUtils.getSQLiteDatabase();
-			db.beginTransaction();  	     // 开始事物
-			for(int i= 0; i < sqlList.size();i++){
-				db.execSQL(sqlList.get(i));
-				if(null != onBackUpdateData) {
-					lProcessBean.process = i;
-					onBackUpdateData.updata(lProcessBean);
-				}
-			}
-			db.setTransactionSuccessful();   // 设置事物标记为成功
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			LogUtil.e(TAG, "事物操作失败");
-			lProcessBean.process = -1;
-			if(null != onBackUpdateData){
-				ThreadHelper.runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
+			try {
+				lProcessBean.total = sqlList.size();
+				db = DatabaseUtils.getSQLiteDatabase();
+				db.beginTransaction();         // 开始事物
+				for (int i = 0; i < sqlList.size(); i++) {
+					db.execSQL(sqlList.get(i));
+					if (null != onBackUpdateData) {
+						lProcessBean.process = i;
 						onBackUpdateData.updata(lProcessBean);
 					}
-				});
+				}
+				db.setTransactionSuccessful();   // 设置事物标记为成功
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				LogUtil.e(TAG, "事物操作失败");
+				lProcessBean.process = -1;
+				if (null != onBackUpdateData) {
+					ThreadHelper.runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							onBackUpdateData.updata(lProcessBean);
+						}
+					});
+				}
+				return false;
+			} finally {
+				db.endTransaction();
 			}
-			return false;
-		}finally{
-			 db.endTransaction();
+		}catch (Exception e){
+			e.printStackTrace();
 		}
+		return false;
 	}
 
 
