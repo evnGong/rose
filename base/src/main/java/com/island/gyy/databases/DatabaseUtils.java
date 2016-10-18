@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.island.gyy.base.bean.ProcessBean;
 import com.island.gyy.interfaces.OnBackUpdateData;
+import com.island.gyy.thread.ThreadHelper;
 import com.island.gyy.utils.LogUtil;
 
 import java.io.File;
@@ -34,7 +35,7 @@ public class DatabaseUtils {
 	/**
 	 * 创建 SQLite 数据库
 	 * @param path     : 数据文件路径 
-	 * @param mCallback : 初始化回调接口 
+	 * @param callback : 初始化回调接口
 	 * @return         : SQLiteDatabase
 	 */
 	public static SQLiteDatabase createDatabase(String path, DatabaseInitCallback callback) {
@@ -153,14 +154,15 @@ public class DatabaseUtils {
 		return newieGymnastic(list,null);
 	}
 
+  static ProcessBean lProcessBean;
 
 	/**
 	 * 事物操作
-	 * @param sqls : sql 语句 
+	 * @param sqlList : sql 语句
 	 * @return     : 是否成功
 	 */
-	public static boolean newieGymnastic(List<String> sqlList, OnBackUpdateData<ProcessBean> onBackUpdateData) {
-		ProcessBean lProcessBean = new ProcessBean();
+	public static boolean newieGymnastic(List<String> sqlList, final OnBackUpdateData<ProcessBean> onBackUpdateData) {
+		lProcessBean = new ProcessBean();
 
 		try {
 			lProcessBean.total = sqlList.size();
@@ -180,7 +182,12 @@ public class DatabaseUtils {
 			LogUtil.e(TAG, "事物操作失败");
 			lProcessBean.process = -1;
 			if(null != onBackUpdateData){
-				onBackUpdateData.updata(lProcessBean);
+				ThreadHelper.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						onBackUpdateData.updata(lProcessBean);
+					}
+				});
 			}
 			return false;
 		}finally{
