@@ -64,6 +64,7 @@ public abstract class BaseViewProxy<P extends IPresender> implements IViewProxy 
 	};
 
 	public void onPause() {
+		DialogFactory.FACTORY.getIntance().dismissDialog(null);
 	};
 
 	public void onDestroy() {
