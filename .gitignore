@@ -1,5 +1,5 @@
 *.iml
-.gradle
+
 /local.properties
 /.idea
 .DS_Store
@@ -7,3 +7,4 @@
 .externalNativeBuild
 proguard-rules.pro
 
+build/
