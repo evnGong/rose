@@ -21,31 +21,28 @@ import java.util.List;
 public class DatabaseUtils {
 	
 	private static final String TAG = "DatabaseUtils";
-	
-	private volatile static SQLiteDatabase db;
-	
-	private static String databasePath;
-	
 	/**
 	 * 数据库默认名称
 	 */
 	public static String databaseName = "sqlite.db";
-	
+	static ProcessBean lProcessBean;
+	private volatile static SQLiteDatabase db;
+	private static String databasePath;
 	
 	/**
 	 * 创建 SQLite 数据库
-	 * @param path     : 数据文件路径 
+	 * @param path     : 数据文件路径
 	 * @param callback : 初始化回调接口
 	 * @return         : SQLiteDatabase
 	 */
 	public static SQLiteDatabase createDatabase(String path, DatabaseInitCallback callback) {
-		
+
 		databasePath = new StringBuilder().append(path).append("/").append(databaseName).toString();
-		
+
 		if(!new File(databasePath).exists()) {
 			db = SQLiteDatabase.openOrCreateDatabase(databasePath, null);
 			if(callback != null) callback.initDatabase(db);      // 初始化数据库
-			
+
 		}else {
 			db = db != null && db.isOpen() ? db : SQLiteDatabase.openDatabase(databasePath, null, 0);
 		}
@@ -62,7 +59,7 @@ public class DatabaseUtils {
 		}
 		return db = db.isOpen() ? db : SQLiteDatabase.openDatabase(databasePath, null, 0);
 	}
-	
+
 	/**
 	 * 插入数据方法
 	 * @param values    : 内容值
@@ -77,8 +74,6 @@ public class DatabaseUtils {
 			return -1;
 		}
 	}
-
-
 	
 	/**
 	 * 删除数据的方法
@@ -128,7 +123,7 @@ public class DatabaseUtils {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * 查询数据
 	 * @param sql    : 查询的SQL
@@ -142,7 +137,6 @@ public class DatabaseUtils {
 		}
 	}
 
-
 	/**
 	 * 事物操作
 	 * @param sqls : sql 语句
@@ -152,8 +146,6 @@ public class DatabaseUtils {
 		List<String> list =	Arrays.asList(sqls);
 		return newieGymnastic(list,null);
 	}
-
-  static ProcessBean lProcessBean;
 
 	/**
 	 * 事物操作
@@ -172,7 +164,12 @@ public class DatabaseUtils {
 					db.execSQL(sqlList.get(i));
 					if (null != onBackUpdateData) {
 						lProcessBean.process = i;
-						onBackUpdateData.updata(lProcessBean);
+						ThreadHelper.runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								onBackUpdateData.updata(lProcessBean);
+							}
+						});
 					}
 				}
 				db.setTransactionSuccessful();   // 设置事物标记为成功
