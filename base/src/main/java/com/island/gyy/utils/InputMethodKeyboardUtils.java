@@ -11,14 +11,16 @@ import android.view.inputmethod.InputMethodManager;
 * @version V1.0 
 */ 
 public class InputMethodKeyboardUtils {
-	
+
+	private static InputState mInputState = InputState.Null;
+
 	/**
 	 * 打开或隐藏软键盘
 	 * @param mContext
 	 */
 	private static void hideOrShowKeyboard(Context context) {
-		InputMethodManager inputMethodManager=(InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);  
-		inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);  
+		InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 	}
 
 	/**
@@ -26,6 +28,7 @@ public class InputMethodKeyboardUtils {
 	 * @param mContext
 	 */
 	public static void hideKeyboard(Context context){
+		getInputStatus(context);
 		if(mInputState == InputState.True){
 			hideOrShowKeyboard(context);
 		}
@@ -37,6 +40,7 @@ public class InputMethodKeyboardUtils {
 	 * @param mContext
 	 */
 	public static void showKeyboard(Context context){
+		getInputStatus(context);
 		if(mInputState == InputState.False){
 			hideOrShowKeyboard(context);
 		}
@@ -49,8 +53,8 @@ public class InputMethodKeyboardUtils {
 	 * @param view
 	 */
 	public static void forceShowKeyboard(Context context, View view) {
-		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE); 
-        imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.SHOW_FORCED);
+		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.SHOW_FORCED);
         setInputState(InputState.True);
 	}
 	
@@ -60,8 +64,8 @@ public class InputMethodKeyboardUtils {
 	 * @param view
 	 */
 	public static void forceHideKeyboard(Context context, View view) {
-		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE); 
-        imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(view.getWindowToken(),0);
 		hideKeyboard(context);
         setInputState(InputState.False);
 	}
@@ -76,17 +80,14 @@ public class InputMethodKeyboardUtils {
 		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 		mInputState = imm.isActive()? InputState.True: InputState.False;
 		}
-		return mInputState == InputState.True;     // 若返回true，则表示输入法打开  
+		return mInputState == InputState.True;     // 若返回true，则表示输入法打开
 	}
-	
+
+	public static void setInputState(InputState mInputState) {
+		InputMethodKeyboardUtils.mInputState = mInputState;
+	}
 	
 	public enum InputState{
 		Null,True,False;
-	}
-	
-	private static InputState mInputState = InputState.Null;
-	
-	public static void setInputState(InputState mInputState) {
-		InputMethodKeyboardUtils.mInputState = mInputState;
 	}
 }

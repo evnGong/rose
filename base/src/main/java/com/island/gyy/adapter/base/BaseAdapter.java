@@ -51,9 +51,13 @@ public class BaseAdapter<T> extends android.widget.BaseAdapter {
 		setAdapterViewDelegate(mDelegate);
 	}
 
+	public List<T> getLists() {
+		return mLists;
+	}
+
 	/**
 	 * 设置数据
-	 * 
+	 *
 	 * @author island
 	 **/
 	public void setLists(List<T> mLists) {
@@ -63,8 +67,8 @@ public class BaseAdapter<T> extends android.widget.BaseAdapter {
 		this.mLists = mLists;
 	}
 
-	public List<T> getLists() {
-		return mLists;
+	public Context getContext() {
+		return mContext;
 	}
 
 	public void setContext(Context mContext) {
@@ -73,18 +77,14 @@ public class BaseAdapter<T> extends android.widget.BaseAdapter {
 		this.mContext = mContext;
 	}
 
-	public Context getContext() {
-		return mContext;
+	public int getLayoutId() {
+		return mLayoutId;
 	}
 
 	public void setLayoutId(int mLayoutId) {
 		if (0 == mLayoutId)
 			throw new NullPointerException("set layoutId");
 		this.mLayoutId = mLayoutId;
-	}
-
-	public int getLayoutId() {
-		return mLayoutId;
 	}
 
 	@Override
@@ -253,7 +253,7 @@ public class BaseAdapter<T> extends android.widget.BaseAdapter {
 		} else {
 			// 多个layout支持,仅仅支持使用view delegate的重写方式；
 			if (null == convertView) {
-				convertView = LayoutInflater.from(mContext).inflate(mAdapterViewDelegate.getLayoutId(position), null);
+				convertView = LayoutInflater.from(mContext).inflate(getLayoutId(), null);
 			}
 			mAdapterViewDelegate.showViewData(convertView, this, position);
 		}
