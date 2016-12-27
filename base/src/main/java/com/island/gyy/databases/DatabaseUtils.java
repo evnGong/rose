@@ -211,7 +211,12 @@ public class DatabaseUtils {
 	public static void closeDatabase() {
 		if(db != null && db.isOpen()) db.close(); 
 	}
-	
+
+
+	public static String transactSQLInjection(String sql) {
+		return sql.replaceAll("([';\"]+|(--)+)", " ");
+	}
+
 	/**
 	 * 数据库初始化回调接口
 	 * @author BD

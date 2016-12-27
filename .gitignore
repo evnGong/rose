@@ -8,3 +8,4 @@
 proguard-rules.pro
 
 build/
+.gradle/

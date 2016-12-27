@@ -41,7 +41,7 @@ public class InputMethodKeyboardUtils {
 	 */
 	public static void showKeyboard(Context context){
 		getInputStatus(context);
-		if(mInputState == InputState.False){
+		if (mInputState == InputState.True) {
 			hideOrShowKeyboard(context);
 		}
 		setInputState(InputState.True);

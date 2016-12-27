@@ -6,20 +6,15 @@ import com.island.gyy.base.BaseApplication;
 import com.island.gyy.base.bean.ProcessBean;
 import com.island.gyy.databases.Database2BeanUtils;
 import com.island.gyy.databases.DatabaseUtils;
-import com.island.gyy.databases.annotation.IncreateColumn;
 import com.island.gyy.interfaces.OnBackUpdateData;
 import com.island.gyy.thread.ThreadHelper;
 import com.island.gyy.utils.FileUtil;
 import com.island.gyy.utils.NullUtils;
-import com.island.gyy.utils.ReflectionUtil;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static com.island.gyy.utils.ReflectionUtil.containAnnatiton;
 
 /**
  * Created with Android Studio.
@@ -30,7 +25,7 @@ import static com.island.gyy.utils.ReflectionUtil.containAnnatiton;
  */
 public class BaseDataBaseDao<T> extends BaseDao<T> {
 
-    protected void init(final String[] str){
+    protected void init(final String[] str) {
         try {
             DatabaseUtils.getSQLiteDatabase();
         } catch (NullPointerException e) {
@@ -68,7 +63,9 @@ public class BaseDataBaseDao<T> extends BaseDao<T> {
             }
             buffer.replace(buffer.length() - 1, buffer.length(), ") values (");
             for (String column : lMap.keySet()) {
-                buffer.append(lMap.get(column)).append(",");
+                String data = lMap.get(column);
+                data = DatabaseUtils.transactSQLInjection(data);
+                buffer.append(data).append(",");
             }
         }
         buffer.replace(buffer.length() - 1, buffer.length(), ");");
@@ -76,14 +73,14 @@ public class BaseDataBaseDao<T> extends BaseDao<T> {
     }
 
 
-    public <T> StringBuffer getUpdateSql( String table, T item) {
+    public <T> StringBuffer getUpdateSql(String table, T item) {
         StringBuffer buffer = new StringBuffer();
         buffer.append("update " + table + " set ");
         HashMap<String, String> lMap = Database2BeanUtils.getBeanMap(item);
         if (lMap != null && lMap.size() > 0) {
             for (String column : lMap.keySet()) {
-               if(column.equals("_id"))
-                   continue;
+                if (column.equals("_id"))
+                    continue;
                 buffer.append(column).append("=").append(lMap.get(column)).append(",");
             }
         }
@@ -100,7 +97,7 @@ public class BaseDataBaseDao<T> extends BaseDao<T> {
 
     /**
      * @method 通过实体插入数据
-     * @author  Island_gyy 【island_yy@qq.com】
+     * @author Island_gyy 【island_yy@qq.com】
      * @date 2016/10/10 17:21
      * @describe
      */
@@ -124,17 +121,17 @@ public class BaseDataBaseDao<T> extends BaseDao<T> {
 
 
     public void insertSync(String tableName, List<T> list, OnBackUpdateData<ProcessBean> onBackUpdateData) {
-            DatabaseUtils.newieGymnastic(getInsertSql(tableName, list),onBackUpdateData );
+        DatabaseUtils.newieGymnastic(getInsertSql(tableName, list), onBackUpdateData);
     }
 
     /**
      * @method 同步获取插入
-     * @author  Island_gyy 【island_yy@qq.com】
+     * @author Island_gyy 【island_yy@qq.com】
      * @date 2016/10/10 17:21
      * @describe
      */
     public void insertSync(final String tableName, final T item) {
-            DatabaseUtils.execute(getInsertSql(tableName, item));
+        DatabaseUtils.execute(getInsertSql(tableName, item));
     }
 
 }
