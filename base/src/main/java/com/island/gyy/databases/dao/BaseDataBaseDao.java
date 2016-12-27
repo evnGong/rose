@@ -63,9 +63,7 @@ public class BaseDataBaseDao<T> extends BaseDao<T> {
             }
             buffer.replace(buffer.length() - 1, buffer.length(), ") values (");
             for (String column : lMap.keySet()) {
-                String data = lMap.get(column);
-                data = DatabaseUtils.transactSQLInjection(data);
-                buffer.append(data).append(",");
+                buffer.append(lMap.get(column)).append(",");
             }
         }
         buffer.replace(buffer.length() - 1, buffer.length(), ");");

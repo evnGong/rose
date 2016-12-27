@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.island.gyy.databases.annotation.ColumnName;
 import com.island.gyy.databases.annotation.IncreateColumn;
 import com.island.gyy.factory.ClassAsFactory;
+import com.island.gyy.utils.DateUtils;
 import com.island.gyy.utils.ReflectionUtil;
 
 import java.lang.reflect.Field;
@@ -101,6 +102,7 @@ public class Database2BeanUtils {
                 if (String.class.getName().equals(clsName)) {
                     temp = (String) f.get(item);
                     if (!TextUtils.isEmpty(temp)) {
+                        temp = DatabaseUtils.transactSQLInjection(temp);
                         lMap.put(name, "'" + temp + "'");
                     }
                 } else if (double.class.getName().equals(clsName)) {
