@@ -214,7 +214,7 @@ public class DatabaseUtils {
 
 
 	public static String transactSQLInjection(String sql) {
-		return sql.replaceAll("([';\"]+|(--)+)", " ");
+		return sql.replaceAll("([';\"]+|(--)+)", "、");
 	}
 
 	/**
