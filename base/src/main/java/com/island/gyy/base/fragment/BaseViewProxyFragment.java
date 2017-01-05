@@ -10,7 +10,11 @@ import android.view.View;
 
 import com.island.gyy.base.presender.IPresender;
 import com.island.gyy.base.viewProxy.BaseViewProxy;
+import com.island.gyy.factory.ClassAsFactory;
 import com.island.gyy.utils.FragmentUtil;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 public abstract class BaseViewProxyFragment<T extends BaseViewProxy> extends BaseFragment implements IPresender{
 
@@ -27,6 +31,12 @@ public abstract class BaseViewProxyFragment<T extends BaseViewProxy> extends Bas
 		if(null != getArguments()){
 			initData(getArguments());
 		}
+	}
+
+	@Override
+	public void createViewProxy() {
+		ClassAsFactory<T> lFactory = new ClassAsFactory<>(getClass(), 0);
+		mViewProxy = lFactory.createObj();
 	}
 
 	protected void initData(Bundle arguments){

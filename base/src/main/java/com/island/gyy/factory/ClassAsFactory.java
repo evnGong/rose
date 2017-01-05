@@ -1,6 +1,8 @@
 package com.island.gyy.factory;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,12 @@ public class ClassAsFactory<T> {
 
     public ClassAsFactory(Class<T> t) {
         type = t;
+    }
+
+    public ClassAsFactory(Class t, int actualTypeArgumentsNumber) {
+        Type type = t.getGenericSuperclass();
+        type = ((ParameterizedType) type).getActualTypeArguments()[actualTypeArgumentsNumber];
+        this.type = (Class<T>) type;
     }
 
     public T createObj() {
@@ -40,11 +48,11 @@ public class ClassAsFactory<T> {
         return new ArrayList<T>();
     }
 
-    public List<T> createList(int size){
+    public List<T> createList(int size) {
         List<T> list = new ArrayList<T>();
-        for(int i = 0;i<size;i++){
+        for (int i = 0; i < size; i++) {
             list.add(createObj());
         }
-        return  list;
+        return list;
     }
 }
