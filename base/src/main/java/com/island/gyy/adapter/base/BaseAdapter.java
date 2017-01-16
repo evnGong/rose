@@ -78,6 +78,9 @@ public class BaseAdapter<T> extends android.widget.BaseAdapter {
 	}
 
 	public int getLayoutId() {
+		if (mAdapterViewDelegate != null || mAdapterViewDelegate.getLayoutId() != 0) {
+			mLayoutId = mAdapterViewDelegate.getLayoutId();
+		}
 		return mLayoutId;
 	}
 
@@ -129,11 +132,7 @@ public class BaseAdapter<T> extends android.widget.BaseAdapter {
 	}
 	/***
 	 * 清除数据
-	 * 
-	 * @param position
-	 *            位置
-	 * @param T
-	 *            实体
+	 *
 	 */
 	public void clearLists() {
 		this.mLists.clear();
