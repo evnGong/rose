@@ -78,7 +78,7 @@ public class BaseAdapter<T> extends android.widget.BaseAdapter {
 	}
 
 	public int getLayoutId() {
-		if (mAdapterViewDelegate != null || mAdapterViewDelegate.getLayoutId() != 0) {
+		if (mAdapterViewDelegate != null && mAdapterViewDelegate.getLayoutId() != 0) {
 			mLayoutId = mAdapterViewDelegate.getLayoutId();
 		}
 		return mLayoutId;
