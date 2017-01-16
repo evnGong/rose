@@ -253,7 +253,7 @@ public class BaseAdapter<T> extends android.widget.BaseAdapter {
 		} else {
 			// 多个layout支持,仅仅支持使用view delegate的重写方式；
 			if (null == convertView) {
-				convertView = LayoutInflater.from(mContext).inflate(getLayoutId(), null);
+				convertView = LayoutInflater.from(mContext).inflate(mAdapterViewDelegate.getLayoutId(position), null);
 			}
 			mAdapterViewDelegate.showViewData(convertView, this, position);
 		}
